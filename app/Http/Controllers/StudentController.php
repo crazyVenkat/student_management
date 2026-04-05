@@ -106,4 +106,40 @@ class StudentController extends Controller
             ->select('id', 'name')
             ->get();
     }
+
+    // Edit (Fetch data)
+    public function edit($id)
+    {
+        $student = Student::findOrFail($id);
+        return response()->json($student);
+    }
+
+    // Update
+    public function update(Request $request, $id)
+    {
+        $student = Student::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'department_id' => 'required',
+            'programme_id' => 'required',
+        ]);
+
+        $student->update($request->all());
+
+        return response()->json([
+            'message' => 'Student updated successfully'
+        ]);
+    }
+
+    // Delete
+    public function destroy($id)
+    {
+        Student::findOrFail($id)->delete();
+
+        return response()->json([
+            'message' => 'Student deleted successfully'
+        ]);
+    }
 }

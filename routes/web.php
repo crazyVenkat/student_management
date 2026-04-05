@@ -21,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
     Route::get('/students/list', [StudentController::class, 'list'])->name('students.list');
     Route::post('/students/store', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/students/{id}/edit', [StudentController::class, 'edit']);
+    Route::post('/students/update/{id}', [StudentController::class, 'update']);
+    Route::delete('/students/delete/{id}', [StudentController::class, 'destroy']);
 
     // Dependent dropdown
     Route::get('/programmes/{department_id}', [StudentController::class, 'getProgrammes']);

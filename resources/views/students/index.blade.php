@@ -15,7 +15,7 @@
 
             <form id="studentForm">
                 @csrf
-
+                <input type="hidden" name="id" id="student_id">
                 <div class="row">
 
                     <div class="col-md-3">
@@ -127,8 +127,11 @@ $(document).ready(function () {
         $('#loader').show();
         $('#msg').html('');
 
+        let id = $('#student_id').val();
+        let url = id ? '/students/update/' + id : '/students/store';
+
         $.ajax({
-            url: '/students/store',
+            url: url,
             type: 'POST',
             data: $(this).serialize(),
 
@@ -139,8 +142,9 @@ $(document).ready(function () {
                 $('#msg').html(`<div class="alert alert-success">${res.message}</div>`);
 
                 $('#studentForm')[0].reset();
+                $('#student_id').val('');
 
-                table.ajax.reload(); // ✅ now works
+                table.ajax.reload();
             },
 
             error: function (xhr) {
@@ -163,6 +167,45 @@ $(document).ready(function () {
                 } else {
                     $('#msg').html('<div class="alert alert-danger">Something went wrong</div>');
                 }
+            }
+        });
+    });
+
+    $(document).on('click', '.editBtn', function () {
+
+        let id = $(this).data('id');
+
+        $.get('/students/' + id + '/edit', function (data) {
+
+            $('#student_id').val(data.id);
+            $('input[name="name"]').val(data.name);
+            $('input[name="email"]').val(data.email);
+            $('#department').val(data.department_id).trigger('change');
+
+            // wait for programme load
+            setTimeout(() => {
+                $('#programme').val(data.programme_id);
+            }, 500);
+        });
+    });
+
+    $(document).on('click', '.deleteBtn', function () {
+
+        let id = $(this).data('id');
+
+        if (!confirm('Are you sure you want to delete this student?')) return;
+
+        $.ajax({
+            url: '/students/delete/' + id,
+            type: 'DELETE',
+
+            success: function (res) {
+                $('#msg').html(`<div class="alert alert-success">${res.message}</div>`);
+                table.ajax.reload();
+            },
+
+            error: function () {
+                $('#msg').html('<div class="alert alert-danger">Delete failed</div>');
             }
         });
     });
