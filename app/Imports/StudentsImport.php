@@ -21,7 +21,6 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOn
             'email'         => $row['email'],
             'department_id' => $row['department_id'],
             'programme_id'  => $row['programme_id'],
-            // 'status'        => $row['status'] ?? 1,
         ]);
     }
 
@@ -32,7 +31,6 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOn
             '*.email'         => 'required|email|unique:students,email',
             '*.department_id' => 'required|exists:departments,id',
             '*.programme_id'  => 'required|exists:programmes,id',
-            // '*.status'        => 'nullable|in:0,1',
         ];
     }
 
