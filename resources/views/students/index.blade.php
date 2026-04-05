@@ -52,7 +52,27 @@
 
         </div>
     </div>
+    <div class="card mb-3">
+        <div class="card-body">
 
+            <form id="importForm" enctype="multipart/form-data">
+                @csrf
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="file" name="file" class="form-control">
+                    </div>
+
+                    <div class="col-md-2">
+                        <button class="btn btn-success">Upload Excel</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="importErrors" class="mt-2"></div>
+
+        </div>
+    </div>
     <!-- DataTable -->
     <table class="table table-bordered" id="studentsTable">
         <thead>
@@ -206,6 +226,46 @@ $(document).ready(function () {
 
             error: function () {
                 $('#msg').html('<div class="alert alert-danger">Delete failed</div>');
+            }
+        });
+    });
+
+    $('#importForm').on('submit', function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        $('#importErrors').html('');
+
+        $.ajax({
+            url: "{{ route('students.import') }}",
+            type: "POST",
+            data: formData,
+            processData: false, // IMPORTANT
+            contentType: false, // IMPORTANT
+
+            success: function(response) {
+                if (response.status) {
+                    alert(response.message);
+                    $('#studentsTable').DataTable().ajax.reload();
+                } else {
+                    let errorHtml = '';
+                    response.errors.forEach(function(err) {
+                        errorHtml += `<p>${err}</p>`;
+                    });
+                    $('#importErrors').html(errorHtml);
+                }
+            },
+
+            error: function(xhr) {
+                let errors = xhr.responseJSON.errors;
+                let errorHtml = '';
+
+                $.each(errors, function(key, value) {
+                    errorHtml += `<p>${value}</p>`;
+                });
+
+                $('#importErrors').html(errorHtml);
             }
         });
     });

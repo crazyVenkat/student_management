@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/students/{id}/edit', [StudentController::class, 'edit']);
     Route::post('/students/update/{id}', [StudentController::class, 'update']);
     Route::delete('/students/delete/{id}', [StudentController::class, 'destroy']);
+    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
 
     /* Staffs */
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');

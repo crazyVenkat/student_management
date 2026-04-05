@@ -7,6 +7,9 @@ use App\Models\Department;
 use App\Models\Programme;
 use App\Http\Requests\StoreStudentRequest;
 use Yajra\DataTables\Facades\DataTables;
+use App\Imports\StudentsImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Validation\ValidationException;
 
 class StudentController extends Controller
 {
@@ -141,5 +144,46 @@ class StudentController extends Controller
         return response()->json([
             'message' => 'Student deleted successfully'
         ]);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            $import = new StudentsImport();
+            Excel::import($import, $request->file('file'));
+
+            // Collect failures
+            $failures = $import->failures();
+
+            if ($failures->isNotEmpty()) {
+                $errors = [];
+
+                foreach ($failures as $failure) {
+                    $errors[] = "Row {$failure->row()}: " . implode(', ', $failure->errors());
+                }
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Some rows failed',
+                    'errors' => $errors
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Students imported successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Import failed',
+                'errors' => [$e->getMessage()]
+            ]);
+        }
     }
 }
