@@ -54,7 +54,7 @@
     </div>
 
     <!-- DataTable -->
-    <table class="table table-bordered" id="studentTable">
+    <table class="table table-bordered" id="studentsTable">
         <thead>
             <tr>
                 <th>#</th>
@@ -62,6 +62,7 @@
                 <th>Email</th>
                 <th>Department</th>
                 <th>Programme</th>
+                <th>Action</th>
             </tr>
         </thead>
     </table>
@@ -69,18 +70,31 @@
 <script>
 $(document).ready(function () {
 
-    // DataTable
-    var table = $('#studentTable').DataTable({
+    // CSRF
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // DataTable INIT (IMPORTANT: assign to variable)
+    let table = $('#studentsTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ url('/students/list') }}",
+        responsive: true,
+
+        ajax: "{{ route('students.list') }}",
+
         columns: [
-            { data: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'name', name: 'name' },
-            { data: 'email', name: 'email' },
-            { data: 'department', name: 'department' },
-            { data: 'programme', name: 'programme' }
-        ]
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'name', name: 'students.name' },
+            { data: 'email', name: 'students.email' },
+            { data: 'department', name: 'department.name' },
+            { data: 'programme', name: 'programme.name' },
+            { data: 'action', name: 'action', orderable: false, searchable: false },
+        ],
+
+        order: [[1, 'asc']]
     });
 
     // Department change
@@ -126,7 +140,7 @@ $(document).ready(function () {
 
                 $('#studentForm')[0].reset();
 
-                table.ajax.reload();
+                table.ajax.reload(); // ✅ now works
             },
 
             error: function (xhr) {
