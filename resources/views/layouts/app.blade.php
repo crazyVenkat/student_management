@@ -13,6 +13,21 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
+    {{-- Font-awesome --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    .sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.sidebar-menu li a i {
+    width: 20px;
+    margin-right: 10px;
+}
+</style>
 </head>
 
 <body>
@@ -22,8 +37,6 @@
     @include('layouts.sidebar')
 
     <div class="flex-grow-1 p-3">
-        @include('layouts.navbar')
-
         @yield('content')
     </div>
 

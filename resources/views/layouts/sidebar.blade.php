@@ -5,13 +5,18 @@
     <ul class="nav flex-column">
 
         <li class="nav-item mb-2">
+            <a href="{{ route('dashboard') }}" class="nav-link text-white">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item mb-2">
             <a href="{{ route('students.index') }}" class="nav-link text-white">
-                🎓 Students
+                <i class="bi bi-mortarboard"></i> Students
             </a>
         </li>
         <li class="nav-item mb-2">
             <a href="{{ route('staff.index') }}" class="nav-link text-white">
-                👨‍🏫 Staff
+                <i class="bi bi-people-fill"></i> Staff
             </a>
         </li>
 
@@ -21,7 +26,7 @@
             <form id="logout-form" method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="nav-link text-danger">
-                    Logout
+                    <i class="bi bi-box-arrow-right"></i> Logout
                 </button>
             </form>
         </li>
