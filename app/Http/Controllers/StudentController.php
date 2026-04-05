@@ -10,6 +10,8 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Imports\StudentsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Validation\ValidationException;
+use App\Jobs\ImportStudentsJob;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -146,44 +148,25 @@ class StudentController extends Controller
         ]);
     }
 
-    public function import(Request $request)
+    public function importStudents(Request $request)
     {
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv'
         ]);
 
-        try {
-            $import = new StudentsImport();
-            Excel::import($import, $request->file('file'));
+        // Store file properly
+        $file = $request->file('file');
+        $fileName = time() . '_' . $file->getClientOriginalName();
 
-            // Collect failures
-            $failures = $import->failures();
+        $filePath = $file->storeAs('imports', $fileName, 'public');
 
-            if ($failures->isNotEmpty()) {
-                $errors = [];
+        // Dispatch job with FULL PATH
+        ImportStudentsJob::dispatch($filePath);
 
-                foreach ($failures as $failure) {
-                    $errors[] = "Row {$failure->row()}: " . implode(', ', $failure->errors());
-                }
-
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Some rows failed',
-                    'errors' => $errors
-                ]);
-            }
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Students imported successfully'
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Import failed',
-                'errors' => [$e->getMessage()]
-            ]);
-        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Import started in background'
+        ]);
     }
+
 }

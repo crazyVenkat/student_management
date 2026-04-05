@@ -26,12 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/students/{id}/edit', [StudentController::class, 'edit']);
     Route::post('/students/update/{id}', [StudentController::class, 'update']);
     Route::delete('/students/delete/{id}', [StudentController::class, 'destroy']);
-    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+    Route::post('/students/import', [StudentController::class, 'importStudents'])->name('students.import');
 
     /* Staffs */
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
     Route::get('/staff/list', [StaffController::class, 'list'])->name('staff.list');
-
     Route::post('/staff/store', [StaffController::class, 'store']);
     Route::get('/staff/{id}/edit', [StaffController::class, 'edit']);
     Route::post('/staff/update/{id}', [StaffController::class, 'update']);

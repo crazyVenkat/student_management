@@ -9,19 +9,6 @@
                 🎓 Students
             </a>
         </li>
-
-        <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white">
-                🏫 Departments
-            </a>
-        </li>
-
-        <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white">
-                📘 Programmes
-            </a>
-        </li>
-
         <li class="nav-item mb-2">
             <a href="{{ route('staff.index') }}" class="nav-link text-white">
                 👨‍🏫 Staff
@@ -31,9 +18,12 @@
         <hr class="bg-light">
 
         <li class="nav-item">
-            <a href="#" id="logoutBtn" class="nav-link text-danger">
-                🚪 Logout
-            </a>
+            <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="nav-link text-danger">
+                    Logout
+                </button>
+            </form>
         </li>
 
     </ul>
