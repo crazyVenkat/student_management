@@ -28,10 +28,6 @@ class StaffController extends Controller
                     return optional($row->department)->name ?? '-';
                 })
 
-                ->addColumn('status', function ($row) {
-                    return '<span class="badge bg-success">Active</span>';
-                })
-
                 ->addColumn('action', function ($row) {
                     return '
                         <button class="btn btn-sm btn-primary editBtn" data-id="'.$row->id.'">Edit</button>

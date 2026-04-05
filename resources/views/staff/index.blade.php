@@ -57,7 +57,6 @@
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Department</th>
-                <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -78,7 +77,6 @@ $(function () {
             { data: 'email', name: 'staff.email' },
             { data: 'phone', name: 'staff.phone' },
             { data: 'department', name: 'department.name' },
-            { data: 'status', name: 'status', orderable:false, searchable:false },
             { data: 'action', orderable:false, searchable:false }
         ]
     });

@@ -41,14 +41,6 @@ class StudentController extends Controller
                 ->addColumn('programme', function ($row) {
                     return optional($row->programme)->name ?? '-';
                 })
-
-                // Status Column (Optional but good for interview)
-                ->addColumn('status', function ($row) {
-                    return $row->status
-                        ? '<span class="badge bg-success">Active</span>'
-                        : '<span class="badge bg-danger">Inactive</span>';
-                })
-
                 // Action Column (IMPORTANT)
                 ->addColumn('action', function ($row) {
                     return '
@@ -84,7 +76,7 @@ class StudentController extends Controller
                 })
 
                 // Allow HTML rendering
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action'])
 
                 ->make(true);
         }
