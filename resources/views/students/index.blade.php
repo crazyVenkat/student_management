@@ -241,8 +241,8 @@ $(document).ready(function () {
             url: "{{ route('students.import') }}",
             type: "POST",
             data: formData,
-            processData: false, // IMPORTANT
-            contentType: false, // IMPORTANT
+            processData: false,
+            contentType: false,
 
             success: function(response) {
                 if (response.status) {

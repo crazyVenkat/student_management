@@ -66,6 +66,13 @@
 <script>
 $(function () {
 
+    // CSRF
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     let table = $('#staffTable').DataTable({
         processing: true,
         serverSide: true,
